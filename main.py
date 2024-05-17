@@ -7,9 +7,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        salto_alto = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/salto in alto.png').convert_alpha()
+        salto_alto = pygame.image.load('Brambilla-Mariani-img/salto in alto.png').convert_alpha()
         salto_alto = pygame.transform.rotozoom(salto_alto, 0, 0.5)
-        salto_basso = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/salto in basso.png').convert_alpha()
+        salto_basso = pygame.image.load('Brambilla-Mariani-img/salto in basso.png').convert_alpha()
         salto_basso = pygame.transform.rotozoom(salto_basso, 0, 0.5)
         salti = [salto_alto, salto_basso]
         ind_salti = 1
@@ -42,8 +42,8 @@ class Player(pygame.sprite.Sprite):
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
-sfondo = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/sfondo.png').convert()
-ground = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/ground.png').convert()
+sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
+ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
