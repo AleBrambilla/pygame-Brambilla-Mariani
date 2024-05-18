@@ -33,7 +33,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += 5
 
         if self.rect.x>550:
-            self.rect.x-=550
+            self.rect.x=0
 
         if self.rect.x<0:
             self.rect.x=550
