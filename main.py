@@ -15,14 +15,17 @@ ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
 player = pygame.sprite.GroupSingle()
 player.add(Player())
 
-pygame.display.set_caption('Home')
+pygame.display.set_caption('Game')
 
 clock = pygame.time.Clock()
 fps = 60
 
-keys=pygame.key.get_pressed()
+mouse=pygame.mouse.get_pos()
+tasti_mouse=pygame.mouse.get_pressed()
 
 while True:
+
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -36,3 +39,5 @@ while True:
     
     pygame.display.update()
     clock.tick(60)
+
+
