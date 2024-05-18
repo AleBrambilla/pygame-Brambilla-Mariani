@@ -32,6 +32,12 @@ class Player(pygame.sprite.Sprite):
         if keys[K_RIGHT]:
             self.rect.x += 5
 
+        if self.rect.x>550:
+            self.rect.x-=550
+
+        if self.rect.x<0:
+            self.rect.x=550
+
     def anima(self):
         if self.gravity>0:
             self.image=salto_basso
