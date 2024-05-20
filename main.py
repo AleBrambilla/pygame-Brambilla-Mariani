@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from random import randint, choice
 
 from player import Player
 from piattaforme import Piattaforma
@@ -41,17 +42,31 @@ def gameover():
     if player.sprite.rect.y>800:
         Game_Over=True
     
+def collisions():
+    global inizio
     
+    if pygame.sprite.spritecollide(player.sprite, piattaforme, False) or inizio: 
+        ris= True
+    else:
+        ris=False
 
+    if pygame.sprite.spritecollide(player.sprite, piattaforme, False):
+        inizio=False
+
+    return ris
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
-sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
-ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
+sfondo = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/sfondo.png').convert()
+ground = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/ground.png').convert()
 ground_rect=ground.get_rect(topleft=(0, 700))
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
+
+piattaforme = pygame.sprite.Group()
+piattaforme.add(Piattaforma(randint(500, 600)))
+
 
 pygame.display.set_caption('Home')
 
@@ -59,8 +74,9 @@ clock = pygame.time.Clock()
 fps = 60
 
 
-global Game_Over
+global Game_Over, inizio
 Game_Over=True
+inizio=True
 
 while True:
 
@@ -76,9 +92,16 @@ while True:
         pygame.display.set_caption('Game')
         screen.blit(sfondo, (0,0))
         screen.blit(ground, ground_rect)
-        player.update()
-        player.draw(screen) 
-    
+
+        salta=collisions() 
+        
+        if piattaforme.sprites()[-1].rect.y > 0:
+            piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
+
+        piattaforme.draw(screen)
+        player.update(salta)
+        player.draw(screen)
+
     pygame.display.update()
     clock.tick(60)
 
