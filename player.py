@@ -7,9 +7,9 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         global salto_alto, salto_basso
-        salto_alto = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/salto in alto.png').convert_alpha()
+        salto_alto = pygame.image.load('Brambilla-Mariani-img/salto in alto.png').convert_alpha()
         salto_alto = pygame.transform.rotozoom(salto_alto, 0, 0.5)
-        salto_basso = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/salto in basso.png').convert_alpha()
+        salto_basso = pygame.image.load('Brambilla-Mariani-img/salto in basso.png').convert_alpha()
         salto_basso = pygame.transform.rotozoom(salto_basso, 0, 0.5)
 
         self.image = salto_alto
@@ -25,8 +25,7 @@ class Player(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.gravity += 1
         self.rect.y += self.gravity
-        if self.rect.bottom > 700:
-            self.rect.bottom = 700
+        
 
     def movimento(self):
         keys = pygame.key.get_pressed()

@@ -4,13 +4,13 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Piattaforma
+from piattaforme import Piattaforma, bool_scorrere
 
 pygame.init()
 
 def gameover():
 
-    global Game_Over
+    global Game_Over, mouse, tasti_mouse
 
     screen.fill((0,200,250))
 
@@ -27,8 +27,7 @@ def gameover():
     titolo=font.render('TITOLO', True, (100,255,0))
     titolo_rect=titolo.get_rect(midtop=(275, 50))
 
-    mouse=pygame.mouse.get_pos()
-    tasti_mouse=pygame.mouse.get_pressed()
+    
 
     if Game_Over:
 
@@ -52,13 +51,16 @@ def collisions():
 
     if pygame.sprite.spritecollide(player.sprite, piattaforme, False):
         inizio=False
+        
+    if not inizio:
+        ground_rect.y+=5
 
     return ris
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
-sfondo = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/sfondo.png').convert()
-ground = pygame.image.load('pygame-Brambilla-Mariani/Brambilla-Mariani-img/ground.png').convert()
+sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
+ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
 ground_rect=ground.get_rect(topleft=(0, 700))
 
 player = pygame.sprite.GroupSingle()
@@ -74,13 +76,18 @@ clock = pygame.time.Clock()
 fps = 60
 
 
-global Game_Over, inizio
+global Game_Over, inizio, mouse, tasti_mouse
+
 Game_Over=True
 inizio=True
 
 while True:
 
+    mouse=pygame.mouse.get_pos()
+    tasti_mouse=pygame.mouse.get_pressed()
     gameover()
+
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -95,12 +102,20 @@ while True:
 
         salta=collisions() 
         
+        
         if piattaforme.sprites()[-1].rect.y > 0:
             piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
 
         piattaforme.draw(screen)
         player.update(salta)
         player.draw(screen)
+
+
+        if bool_scorrere(piattaforme, player):
+            for piattaforma in piattaforme:
+                piattaforma.scorri()
+    
+
 
     pygame.display.update()
     clock.tick(60)
