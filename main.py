@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 
 from player import Player
+from piattaforme import Piattaforma
 
 pygame.init()
 
@@ -47,6 +48,7 @@ WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
 sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
 ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
+ground_rect=ground.get_rect(topleft=(0, 700))
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
@@ -73,7 +75,7 @@ while True:
 
         pygame.display.set_caption('Game')
         screen.blit(sfondo, (0,0))
-        screen.blit(ground, (0, 700))
+        screen.blit(ground, ground_rect)
         player.update()
         player.draw(screen) 
     

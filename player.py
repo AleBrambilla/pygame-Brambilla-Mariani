@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from piattaforme import Piattaforma
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -14,6 +15,8 @@ class Player(pygame.sprite.Sprite):
         self.image = salto_alto
         self.rect = self.image.get_rect(midbottom = (275,700))
         self.gravity = 0
+
+        self.inizio=True
 
     def salto(self):
         if self.rect.bottom >= 700:
@@ -45,7 +48,13 @@ class Player(pygame.sprite.Sprite):
             self.image=salto_alto
 
     def update(self):
-        self.salto()
+        if self.rect.colliderect(Piattaforma()) or self.inizio:
+            self.salto()
+        if self.rect.colliderect(Piattaforma()):
+            self.inizio=False
+
         self.anima()
         self.apply_gravity()
         self.movimento()
+
+    
