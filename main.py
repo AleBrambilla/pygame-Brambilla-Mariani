@@ -12,6 +12,9 @@ def gameover():
 
     global Game_Over, mouse, tasti_mouse
 
+    mouse=pygame.mouse.get_pos()
+    tasti_mouse=pygame.mouse.get_pressed()
+
     screen.fill((0,200,250))
 
 
@@ -53,7 +56,7 @@ def collisions():
         inizio=False
         
     if not inizio:
-        ground_rect.y+=5
+        ground_rect.y+=3
 
     return ris
 
@@ -73,10 +76,10 @@ piattaforme.add(Piattaforma(randint(500, 600)))
 pygame.display.set_caption('Home')
 
 clock = pygame.time.Clock()
-fps = 60
+fps = 50
 
 
-global Game_Over, inizio, mouse, tasti_mouse
+global Game_Over, inizio
 
 Game_Over=True
 inizio=True
@@ -85,6 +88,8 @@ while True:
 
     mouse=pygame.mouse.get_pos()
     tasti_mouse=pygame.mouse.get_pressed()
+    #print(mouse, tasti_mouse)
+
     gameover()
 
     
