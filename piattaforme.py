@@ -30,7 +30,7 @@ def corrente(piattaforme, player):
                         ris+=1
                         for j in range(len(piattaforme.sprites()[:i-1:])):
                             piattaforme.sprites()[j].corrente=False
-
+                print(piattaforma.corrente)
     
     return ris  
         
@@ -43,11 +43,4 @@ def bool_scorrere(piattaforme, player):
         
 
     return scorri
-    
-
-    
-    
-
-    
-
     

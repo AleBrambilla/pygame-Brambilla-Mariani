@@ -5,6 +5,7 @@ from random import randint, choice
 
 from player import Player
 from piattaforme import Piattaforma, bool_scorrere
+from punteggio import Punteggio
 
 pygame.init()
 
@@ -72,6 +73,7 @@ player.add(Player())
 piattaforme = pygame.sprite.Group()
 piattaforme.add(Piattaforma(randint(500, 600)))
 
+punteggio=Punteggio()
 
 pygame.display.set_caption('Home')
 
@@ -119,6 +121,10 @@ while True:
         if bool_scorrere(piattaforme, player):
             for piattaforma in piattaforme:
                 piattaforma.scorri()
+    
+        punteggio.update(piattaforme, player)
+        punteggio.draw(screen)
+
     
 
 
