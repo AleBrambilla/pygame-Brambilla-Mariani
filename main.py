@@ -126,6 +126,8 @@ while True:
             pygame.quit()
             exit()
 
+    
+
     if not Game_Over:
 
         fatto=False
@@ -141,7 +143,7 @@ while True:
             piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
 
         piattaforme.draw(screen)
-        player.update(salta, piattaforme)
+        player.update(salta, piattaforme, inizio)
         player.draw(screen)
 
 
