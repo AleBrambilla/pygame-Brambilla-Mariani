@@ -16,16 +16,21 @@ class Punteggio:
         self.text=self.font.render(f'score: {self.ammontare}', True, (255,0,0))
         screen.blit(self.text, (30, 30))
 
-    def draw_finale(self, screen, t):
-        font1=pygame.font.Font(None, 150)
+    def draw_finale(self, screen):
+        font1=pygame.font.Font(None, 100)
         gameover=font1.render('GAME OVER', True, (255,255,255))
         gameover_rect=gameover.get_rect(center=(275, 100))
 
         font2=pygame.font.Font(None,50)
-        punteggio_finale=font2.render(f'{self.text}', True, (255,255,255))
+        punteggio_finale=font2.render(f'{self.ammontare}', True, (255,255,255))
         punteggio_finale_rect=punteggio_finale.get_rect(center=(275,550))
 
-        if t:
-            screen.blit(gameover, gameover_rect)
-            screen.blit(punteggio_finale, punteggio_finale_rect)
+        font3=pygame.font.Font(None, 25)
+        istruzioni=font3.render('Space Key --> Home', True, (255,255,255))
+        istruzioni_rect=istruzioni.get_rect(center=(275, 650))
+
+        screen.fill((0,0,0))
+        screen.blit(gameover, gameover_rect)
+        screen.blit(punteggio_finale, punteggio_finale_rect)
+        screen.blit(istruzioni, istruzioni_rect)
 

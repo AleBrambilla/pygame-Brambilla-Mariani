@@ -11,10 +11,7 @@ pygame.init()
 
 def gameover():
 
-    global Game_Over, mouse, tasti_mouse, fatto, t_schermata_finale
-
-    mouse=pygame.mouse.get_pos()
-    tasti_mouse=pygame.mouse.get_pressed()
+    global Game_Over, mouse, tasti_mouse
 
     screen.fill((0,200,250))
 
@@ -32,6 +29,7 @@ def gameover():
     titolo_rect=titolo.get_rect(midtop=(275, 50))
 
     
+    
 
     if Game_Over:
 
@@ -42,9 +40,8 @@ def gameover():
     if start_rect.collidepoint(mouse) and tasti_mouse[0]:
         Game_Over=False
 
-    if player.sprite.rect.y>800 and not fatto:
+    if player.sprite.rect.y>800:
         Game_Over=True
-        fatto=True
         #t_schermata_finale=300
         inizio=True
         #player.sprite.rect.y=-t_schermata_finale*3+800
@@ -96,6 +93,9 @@ player.add(Player())
 
 piattaforme = pygame.sprite.Group()
 piattaforme.add(Piattaforma(randint(500, 600)))
+while piattaforme.sprites()[0].rect.center[0] not in range(220, 330):
+    piattaforme.sprites()[0].kill()
+    piattaforme.add(Piattaforma(randint(500, 600)))
 
 punteggio=Punteggio()
 
@@ -109,7 +109,6 @@ global Game_Over, inizio
 
 Game_Over=True
 inizio=True
-t_schermata_finale=0
 
 while True:
 
@@ -119,18 +118,14 @@ while True:
     cominciare(inizio)
     gameover()
 
-    
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-
-    
+        if event.type== KEYUP and Game_Over and event.key==K_SPACE:
+            inizio=True
 
     if not Game_Over:
-
-        fatto=False
 
         pygame.display.set_caption('Game')
         screen.blit(sfondo, (0,0))
@@ -154,14 +149,13 @@ while True:
         punteggio.update(piattaforme, player)
         punteggio.draw(screen)
 
-        if t_schermata_finale:
-            #screen.fill((0,0,0))
-            #punteggio.draw_finale(screen, t_schermata_finale)
-            t_schermata_finale-=1
 
+
+    elif Game_Over and not inizio:
+        punteggio.draw_finale(screen)
 
     
-
+        
 
     pygame.display.update()
     clock.tick(60)
