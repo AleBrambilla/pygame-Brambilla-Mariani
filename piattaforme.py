@@ -20,19 +20,14 @@ class Piattaforma(pygame.sprite.Sprite):
             if self.rect.y>805:
                 self.kill()
 
-def corrente(piattaforme, player):
-    ris=0           
+def corrente(piattaforme, player):          
     for i,piattaforma in enumerate(piattaforme.sprites()):
                 if not piattaforma.corrente:    
                     if piattaforma.rect.colliderect(player.sprite.rect):
                         piattaforme.sprites()[i].corrente=True
                         #print(piattaforma.corrente)
-                        ris+=1
                         for j in range(len(piattaforme.sprites()[:i-1:])):
-                            piattaforme.sprites()[j].corrente=False
-                print(piattaforma.corrente)
-    
-    return ris  
+                            piattaforme.sprites()[j].corrente=False  
         
 def bool_scorrere(piattaforme, player):
     scorri=True

@@ -78,7 +78,7 @@ punteggio=Punteggio()
 pygame.display.set_caption('Home')
 
 clock = pygame.time.Clock()
-fps = 50
+fps = 60
 
 
 global Game_Over, inizio
@@ -114,7 +114,7 @@ while True:
             piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
 
         piattaforme.draw(screen)
-        player.update(salta)
+        player.update(salta, piattaforme)
         player.draw(screen)
 
 

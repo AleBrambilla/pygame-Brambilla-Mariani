@@ -18,9 +18,14 @@ class Player(pygame.sprite.Sprite):
 
         self.inizio=True
 
-    def salto(self, salta):
-        if self.rect.bottom >= 700 or salta:
-            self.gravity = -22
+    def salto(self, salta, piattaforme):
+        if self.rect.bottom >= 700:
+            for piattaforma in piattaforme.sprites():
+                if piattaforma.corrente and self.rect.bottom>piattaforma.rect.top:
+                    self.gravity = -20
+
+        if salta:
+            self.gravity=-20
 
     def apply_gravity(self):
         self.gravity += 1
@@ -46,10 +51,10 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image=salto_alto
 
-    def update(self, salta):
+    def update(self, salta, piattaforme):
         # if self.rect.colliderect(Piattaforma()) or self.inizio:
-        if salta and self.gravity>0:
-            self.salto(salta)
+        if salta and self.gravity>5:
+            self.salto(salta, piattaforme)
         # if self.rect.colliderect(Piattaforma()):
         #     self.inizio=False
 
