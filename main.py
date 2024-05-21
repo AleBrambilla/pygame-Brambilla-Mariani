@@ -11,7 +11,7 @@ pygame.init()
 
 def gameover():
 
-    global Game_Over, mouse, tasti_mouse
+    global Game_Over, mouse, tasti_mouse, fatto, t_schermata_finale
 
     mouse=pygame.mouse.get_pos()
     tasti_mouse=pygame.mouse.get_pressed()
@@ -39,13 +39,18 @@ def gameover():
         screen.blit(inizio, inizio_rect)
         screen.blit(titolo, titolo_rect)
 
-        if start_rect.collidepoint(mouse) and tasti_mouse[0]:
-            Game_Over=False
+    if start_rect.collidepoint(mouse) and tasti_mouse[0]:
+        Game_Over=False
 
-    if player.sprite.rect.y>800:
+    if player.sprite.rect.y>800 and not fatto:
         Game_Over=True
+        fatto=True
+        #t_schermata_finale=300
+        inizio=True
+        #player.sprite.rect.y=-t_schermata_finale*3+800
     
 def collisions():
+
     global inizio
     
     if pygame.sprite.spritecollide(player.sprite, piattaforme, False) or inizio: 
@@ -60,6 +65,25 @@ def collisions():
         ground_rect.y+=3
 
     return ris
+
+def cominciare(inizio):
+
+    global ground_rect, punteggio, player, piattaforme
+    if inizio:
+        ground_rect=ground.get_rect(topleft=(0, 700))
+
+        player = pygame.sprite.GroupSingle()
+        player.add(Player())
+
+        piattaforme = pygame.sprite.Group()
+        piattaforme.add(Piattaforma(randint(500, 600)))
+
+        punteggio=Punteggio()
+
+        player.sprite.rect.bottom=700
+
+
+
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
@@ -85,13 +109,14 @@ global Game_Over, inizio
 
 Game_Over=True
 inizio=True
+t_schermata_finale=0
 
 while True:
 
     mouse=pygame.mouse.get_pos()
     tasti_mouse=pygame.mouse.get_pressed()
     #print(mouse, tasti_mouse)
-
+    cominciare(inizio)
     gameover()
 
     
@@ -102,6 +127,8 @@ while True:
             exit()
 
     if not Game_Over:
+
+        fatto=False
 
         pygame.display.set_caption('Game')
         screen.blit(sfondo, (0,0))
@@ -124,6 +151,12 @@ while True:
     
         punteggio.update(piattaforme, player)
         punteggio.draw(screen)
+
+        if t_schermata_finale:
+            #screen.fill((0,0,0))
+            #punteggio.draw_finale(screen, t_schermata_finale)
+            t_schermata_finale-=1
+
 
     
 
