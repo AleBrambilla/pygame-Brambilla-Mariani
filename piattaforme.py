@@ -65,15 +65,21 @@ def corrente(piattaforme, player):
                         piattaforme.sprites()[i].corrente=True
 
                         for j in range(len(piattaforme.sprites()[:i-1:])):
-                            piattaforme.sprites()[j].corrente=False  
-        
-def bool_scorrere(piattaforme, player):
+                            piattaforme.sprites()[j].corrente=False
 
-    corrente(piattaforme, player)
+                        break
+
+    return i  
+        
+def bool_scorrere(piattaforme, player, score):
+
+    i=corrente(piattaforme, player)
 
     scorri=True
     for piattaforma in piattaforme.sprites(): 
         if piattaforma.rect.top >=700 and piattaforma.corrente:
+            scorri=False
+        if score<120 and piattaforme.sprites()[i].rect.bottom>800:
             scorri=False
         
 

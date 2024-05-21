@@ -9,7 +9,7 @@ class Punteggio:
         self.text=self.font.render(f'score: {self.ammontare}', True, (255,0,0))
 
     def update(self, piattaforme, player):
-        if bool_scorrere(piattaforme, player):
+        if bool_scorrere(piattaforme, player, self.ammontare):
             self.ammontare+=1
 
     def draw(self, screen):

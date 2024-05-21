@@ -85,6 +85,8 @@ def cominciare(inizio):
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
 sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
+sfondo = pygame.transform.rotozoom(sfondo, 0, 1.1)
+
 ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
 ground_rect=ground.get_rect(topleft=(0, 700))
 
@@ -142,7 +144,7 @@ while True:
         player.draw(screen)
 
 
-        if bool_scorrere(piattaforme, player):
+        if bool_scorrere(piattaforme, player, punteggio.ammontare):
             for piattaforma in piattaforme:
                 piattaforma.scorri()
     
