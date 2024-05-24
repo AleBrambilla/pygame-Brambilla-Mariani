@@ -4,7 +4,7 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, bool_scorrere
+from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere
 from punteggio import Punteggio
 
 pygame.init()
@@ -120,7 +120,7 @@ while True:
         
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos)]))
+            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
             
         salta=collisions()
         piattaforme.draw(screen)
@@ -128,7 +128,7 @@ while True:
         salta = False
         player.draw(screen)
 
-        if bool_scorrere(piattaforme, player) and not inizio:
+        if bool_scorrere(piattaforme) and not inizio:
             ground_rect.y+=5
             player.sprite.rect.y+=5
             for piattaforma in piattaforme:
@@ -146,8 +146,9 @@ while True:
 
     elif stato == 'morte':
         punteggio.draw_finale(screen)
-        if event.type== KEYUP and event.key==K_SPACE:
-            stato = 'home'
+        for event in pygame.event.get():
+            if event.type== KEYUP and event.key==K_SPACE:
+                stato = 'home'
 
     pygame.display.update()
     clock.tick(60)

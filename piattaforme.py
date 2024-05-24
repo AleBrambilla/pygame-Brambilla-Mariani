@@ -1,3 +1,4 @@
+from typing import Any
 import pygame
 from pygame.locals import *
 from random import randint
@@ -6,6 +7,7 @@ pygame.init()
 
 class Piattaforma(pygame.sprite.Sprite):
     def __init__(self, y):
+        global image
         image=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
         super().__init__()
 
@@ -73,8 +75,26 @@ class Cadente(Piattaforma):
             self.gravity += 1
             self.rect.y += self.gravity
 
+class Temporanea(Piattaforma):
+    def __init__(self, y):
+        super().__init__(y)
+        self.frames=0
+        self.x=self.rect.x
+        self.image=pygame.transform.rotozoom(self.image, 180, 1)
 
-def bool_scorrere(piattaforme, player):
+    def update(self):
+        self.frames+=1
+        if self.frames>200:
+            self.rect.x=1000
+        else:
+            self.rect.x=self.x
+
+        if self.frames>400:
+            self.frames=0
+
+
+
+def bool_scorrere(piattaforme):
 
     scorri=True
     for piattaforma in piattaforme.sprites(): 
