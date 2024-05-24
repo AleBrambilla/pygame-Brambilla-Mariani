@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.inizio=True
 
     def salto(self):
-        self.gravity=-20
+        self.gravity=-22
 
     def apply_gravity(self):
         self.gravity += 1
@@ -32,10 +32,10 @@ class Player(pygame.sprite.Sprite):
         if keys[K_RIGHT]:
             self.rect.x += 5
 
-        if (self.rect.x + self.rect.right)//2 > 550:
+        if self.rect.centerx  > 550:
             self.rect.x = -20
 
-        if (self.rect.x + self.rect.right)//2 < 0:
+        if self.rect.centerx < 0:
             self.rect.right=570
 
     def anima(self):
@@ -48,8 +48,7 @@ class Player(pygame.sprite.Sprite):
         if salta and self.gravity>5:
             self.salto()
         self.anima()
-        if not inizio:
-            self.apply_gravity()
+        self.apply_gravity()
         self.movimento()
         
 

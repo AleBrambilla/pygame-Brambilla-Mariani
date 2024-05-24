@@ -9,12 +9,10 @@ from punteggio import Punteggio
 
 pygame.init()
 
-
-
 tasto_start=pygame.Surface((200, 100))
 tasto_start.fill((255,255,255))
 start_rect=tasto_start.get_rect(center=(275, 550))
-    
+        
 font=pygame.font.Font(None, 50)
 inizio_scritta=font.render('INIZIO', True, (0,0,0))
 inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 550))
@@ -25,7 +23,7 @@ titolo_rect=titolo.get_rect(midtop=(275, 50))
 
 def gameover():
 
-    global Game_Over, mouse, tasti_mouse, inizio
+    global Game_Over, inizio
 
     screen.fill((0,200,250))
 
@@ -35,57 +33,29 @@ def gameover():
         screen.blit(inizio_scritta, inizio_scritta_rect)
         screen.blit(titolo, titolo_rect)
 
-    if start_rect.collidepoint(mouse) and tasti_mouse[0]:
+    if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
         Game_Over=False
 
     if player.sprite.rect.y>800:
         Game_Over=True
-        #t_schermata_finale=300
         inizio=True
-        #player.sprite.rect.y=-t_schermata_finale*3+800
     
 def collisions():
     global inizio
-    inizio = False
+    
     for piattaforma in pygame.sprite.spritecollide(player.sprite, piattaforme, False):
-        if player.sprite.rect.bottom > piattaforma.rect.top and player.sprite.rect.bottom < piattaforma.rect.bottom:
+        if player.sprite.rect.bottom > piattaforma.rect.top and player.sprite.rect.bottom < piattaforma.rect.bottom - 5:
+            inizio=False
+            for i,p in enumerate(piattaforme.sprites()):
+                piattaforme.sprites()[i].corrente=False
+            piattaforma.corrente = True
             return True
         
-    if player.sprite.rect.bottom>ground_rect.top:
+    if player.sprite.rect.bottom>=ground_rect.top:
+        inizio = True
         return True
     
     return False
-
-
-#    global inizio
-    
-#    if pygame.sprite.spritecollide(player.sprite, piattaforme, False) : 
-#        ris= True
-#    else:
-#        ris=False
-
-#    if pygame.sprite.spritecollide(player.sprite, piattaforme, False):
-#       inizio=False
-        
-#    if not inizio:
-#       ground_rect.y+=3
-
-#    return ris
-
-#def cominciare(inizio):
-
-#    global ground_rect, punteggio, player, piattaforme
-#    if inizio:
-
-#        player = pygame.sprite.GroupSingle()
-#        player.add(Player())
-
-#        piattaforme = pygame.sprite.Group()
-#        piattaforme.add(Piattaforma(randint(500, 600)))
-
-#        punteggio=Punteggio()
-
-#        player.sprite.rect.bottom=700
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
@@ -100,9 +70,6 @@ player.add(Player())
 
 piattaforme = pygame.sprite.Group()
 piattaforme.add(Piattaforma(randint(500, 600)))
-#while piattaforme.sprites()[0].rect.center[0] not in range(220, 330):
-#    piattaforme.sprites()[0].kill()
-#    piattaforme.add(Piattaforma(randint(500, 600)))
 
 punteggio=Punteggio()
 
@@ -110,13 +77,13 @@ pygame.display.set_caption('Home')
 
 clock = pygame.time.Clock()
 
+
 Game_Over=True
 inizio=True
 
+
 while True:
 
-    mouse=pygame.mouse.get_pos()
-    tasti_mouse=pygame.mouse.get_pressed()
 #    cominciare(inizio)
     gameover()
 
@@ -124,8 +91,19 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type== KEYUP and Game_Over and event.key==K_SPACE:
-            inizio=True
+        
+        if Game_Over:
+
+            if event.type==MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0] and start_rect.collidepoint(pygame.mouse.get_pos()):
+                Game_Over=False
+                ground_rect.y = 700
+                piattaforme.empty()
+                piattaforme.add(Piattaforma(randint(500, 600)))
+                player.sprite.rect.midbottom = (275,700)
+                punteggio=Punteggio()
+                inizio=True
+            if event.type== KEYUP and Game_Over and event.key==K_SPACE:
+                inizio=True
 
     if not Game_Over:
 
@@ -136,17 +114,19 @@ while True:
         if piattaforme.sprites()[-1].rect.y > 0:
             piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
             
-        salta=collisions() 
+        salta=collisions()
         piattaforme.draw(screen)
         player.update(inizio, salta)
         salta = False
         player.draw(screen)
 
-        if bool_scorrere(piattaforme, player, punteggio.ammontare):
+        if bool_scorrere(piattaforme, player)  and not inizio:
+            ground_rect.y+=3
+            player.sprite.rect.y+=3
             for piattaforma in piattaforme:
                 piattaforma.scorri()
     
-        punteggio.update(piattaforme, player)
+        punteggio.update(piattaforme, player, inizio)
         punteggio.draw(screen)
 
     elif Game_Over and not inizio:
@@ -154,5 +134,5 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
-
+    
 

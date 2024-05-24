@@ -52,32 +52,16 @@ class Mobile_y(Piattaforma):
         if self.rect.y < self.centro - self.delta: self.direzione = 1
         if self.rect.y > self.centro + self.delta: self.direzione = -1
 
-def corrente(piattaforme, player):          
-    for i,piattaforma in enumerate(piattaforme.sprites()):
-                
-                if not piattaforma.corrente:  
-                    if piattaforma.rect.colliderect(player.sprite.rect):
 
-                        piattaforme.sprites()[i].corrente=True
 
-                        for j in range(len(piattaforme.sprites()[:i-1:])):
-                            piattaforme.sprites()[j].corrente=False
-
-                        break
-
-    return i  
+ 
         
-def bool_scorrere(piattaforme, player, score):
-
-    i=corrente(piattaforme, player)
+def bool_scorrere(piattaforme, player):
 
     scorri=True
     for piattaforma in piattaforme.sprites(): 
-        if piattaforma.rect.top >=700 and piattaforma.corrente:
+        if piattaforma.rect.top >=600 and piattaforma.corrente:
             scorri=False
-        if score<120 and piattaforme.sprites()[i].rect.bottom>800:
-            scorri=False
-        
 
     return scorri
     
