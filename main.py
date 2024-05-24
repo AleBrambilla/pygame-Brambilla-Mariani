@@ -11,15 +11,29 @@ pygame.init()
 
 tasto_start=pygame.Surface((200, 100))
 tasto_start.fill((255,255,255))
-start_rect=tasto_start.get_rect(center=(275, 550))
+start_rect=tasto_start.get_rect(center=(275, 420))
         
 font=pygame.font.Font(None, 50)
-inizio_scritta=font.render('INIZIO', True, (0,0,0))
-inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 550))
+inizio_scritta=font.render('CLASSIC', True, (0,0,0))
+inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 420))
 
-font=pygame.font.Font(None, 150)
-titolo=font.render('TITOLO', True, (100,255,0))
-titolo_rect=titolo.get_rect(midtop=(275, 50))
+font=pygame.font.SysFont('Cooper Black', 30)
+titolo1=font.render("Ale&Davi's", False, (26,128,5))
+titolo_rect1=titolo1.get_rect(midtop=(275, 50))
+
+font=pygame.font.SysFont('Cooper Black', 90)
+titolo2=font.render("PLATFORM", False, (26,128,5))
+titolo_rect2=titolo2.get_rect(midtop=(275, 130))
+
+tasto_start2=pygame.Surface((200, 100))
+tasto_start2.fill((255,255,255))
+start_rect2=tasto_start2.get_rect(center=(275, 600))
+        
+font=pygame.font.Font(None, 50)
+inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
+inizio_scritta_rect2=inizio_scritta2.get_rect(center=(275, 600))
+
+
 
 def gameover():
 
@@ -27,11 +41,16 @@ def gameover():
 
     screen.fill((0,200,250))
 
-    if Game_Over:   # non è bello come game_over diventa true
+    if Game_Over:   
 
         screen.blit(tasto_start, start_rect)
         screen.blit(inizio_scritta, inizio_scritta_rect)
-        screen.blit(titolo, titolo_rect)
+        screen.blit(titolo1, titolo_rect1)
+        screen.blit(titolo2, titolo_rect2)
+        screen.blit(tasto_start2, start_rect2)
+        screen.blit(inizio_scritta2, inizio_scritta_rect2)
+        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
+        screen.blit(image_piattaforma, (400, 350) )
 
     if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
         Game_Over=False
@@ -87,6 +106,9 @@ piattaforme = pygame.sprite.Group()
 piattaforme.add(Classica(randint(500, 600)))
 
 punteggio=Punteggio()
+
+image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
+image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 30, 0.7)
 
 pygame.display.set_caption('Home')
 
