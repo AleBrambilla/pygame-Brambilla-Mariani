@@ -32,34 +32,7 @@ start_rect2=tasto_start2.get_rect(center=(275, 600))
 font=pygame.font.Font(None, 50)
 inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
 inizio_scritta_rect2=inizio_scritta2.get_rect(center=(275, 600))
-
-
-
-def gameover():
-
-    global Game_Over, inizio, morte
-
-    screen.fill((0,200,250))
-
-    if Game_Over:   
-
-        screen.blit(tasto_start, start_rect)
-        screen.blit(inizio_scritta, inizio_scritta_rect)
-        screen.blit(titolo1, titolo_rect1)
-        screen.blit(titolo2, titolo_rect2)
-        screen.blit(tasto_start2, start_rect2)
-        screen.blit(inizio_scritta2, inizio_scritta_rect2)
-        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
-        screen.blit(image_piattaforma, (400, 350) )
-
-    if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
-        Game_Over=False
-
-    if player.sprite.rect.y>800:
-        Game_Over=True
-        inizio=True
-        morte=True
-    
+   
 def collisions():
     global inizio
     
@@ -90,7 +63,6 @@ def inizializza():
     punteggio=Punteggio()
     inizio=True
 
-
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
 sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
@@ -114,32 +86,34 @@ pygame.display.set_caption('Home')
 
 clock = pygame.time.Clock()
 
-
-Game_Over=True
-inizio=True
-morte=False
+stato = 'home'
 
 while True:
-
-#    cominciare(inizio)
-    gameover()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
         
-        if Game_Over:
+    if stato == 'home':
+        screen.fill((0,200,250))
+        screen.blit(tasto_start, start_rect)
+        screen.blit(inizio_scritta, inizio_scritta_rect)
+        screen.blit(titolo1, titolo_rect1)
+        screen.blit(titolo2, titolo_rect2)
+        screen.blit(tasto_start2, start_rect2)
+        screen.blit(inizio_scritta2, inizio_scritta_rect2)
+        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
+        screen.blit(image_piattaforma, (400, 350))
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+            stato = 'classico'
+            inizializza()
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
+            stato = 'classico'
+            inizializza()
 
-            if event.type==MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0] and start_rect.collidepoint(pygame.mouse.get_pos()):
-                Game_Over=False
-                inizializza()
-            if event.type== KEYUP and Game_Over and event.key==K_SPACE:
-                inizializza()
-                morte = False
-
-    if not Game_Over:
-
+    if stato == 'classico':
+        
         pygame.display.set_caption('Game')
         screen.blit(sfondo, (0,0))
         screen.blit(ground, ground_rect)
@@ -166,8 +140,14 @@ while True:
         punteggio.update(piattaforme, player, inizio)
         punteggio.draw(screen)
 
-    elif Game_Over and morte:
+        if player.sprite.rect.y>800:
+            stato = 'morte'
+            inizio=True
+
+    elif stato == 'morte':
         punteggio.draw_finale(screen)
+        if event.type== KEYUP and event.key==K_SPACE:
+            stato = 'home'
 
     pygame.display.update()
     clock.tick(60)
