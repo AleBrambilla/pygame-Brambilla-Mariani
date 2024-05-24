@@ -23,7 +23,7 @@ titolo_rect=titolo.get_rect(midtop=(275, 50))
 
 def gameover():
 
-    global Game_Over, inizio
+    global Game_Over, inizio, morte
 
     screen.fill((0,200,250))
 
@@ -39,6 +39,7 @@ def gameover():
     if player.sprite.rect.y>800:
         Game_Over=True
         inizio=True
+        morte=True
     
 def collisions():
     global inizio
@@ -80,7 +81,7 @@ clock = pygame.time.Clock()
 
 Game_Over=True
 inizio=True
-
+morte=False
 
 while True:
 
@@ -103,6 +104,14 @@ while True:
                 punteggio=Punteggio()
                 inizio=True
             if event.type== KEYUP and Game_Over and event.key==K_SPACE:
+                inizio=True
+                morte=False
+
+                ground_rect.y = 700
+                piattaforme.empty()
+                piattaforme.add(Piattaforma(randint(500, 600)))
+                player.sprite.rect.midbottom = (275,700)
+                punteggio=Punteggio()
                 inizio=True
 
     if not Game_Over:
@@ -129,7 +138,7 @@ while True:
         punteggio.update(piattaforme, player, inizio)
         punteggio.draw(screen)
 
-    elif Game_Over and not inizio:
+    elif Game_Over and morte:
         punteggio.draw_finale(screen)
 
     pygame.display.update()
