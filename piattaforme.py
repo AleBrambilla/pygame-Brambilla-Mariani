@@ -16,15 +16,17 @@ class Piattaforma(pygame.sprite.Sprite):
         #print(y)
 
     def scorri(self):
-            self.rect.y+=3
-            if self.rect.y>805:
-                self.kill()
+        self.rect.y+=5
+        if self.rect.y>805:
+            self.kill()
+        if type(self) == Mobile_y or type(self) == Cadente:
+            self.centro+=5
             
 class Classica(Piattaforma):
     def __init__(self, y):
         super().__init__(y)
-    def update() -> None:
-        super().scorri()
+    def update(self):
+        pass
 
 class Mobile_x(Piattaforma):
     def __init__(self, y):
@@ -34,28 +36,44 @@ class Mobile_x(Piattaforma):
         self.direzione=-1
     
     def update(self):
-        super().scorri()
         self.rect.x+=self.direzione*3
-        if self.rect.x < self.centro - self.delta: self.direzione = 1
-        if self.rect.x > self.centro + self.delta: self.direzione = -1
+        if self.rect.centerx < self.centro - self.delta: self.direzione = 1
+        if self.rect.centerx > self.centro + self.delta: self.direzione = -1
 
 class Mobile_y(Piattaforma):
     def __init__(self, y):
         super().__init__(y)
-        self.delta=randint(25,100)
+        self.delta=randint(50,100)
         self.centro=self.rect.centery
         self.direzione=-1
     
     def update(self):
-        super().scorri()
         self.rect.y+=self.direzione*3
-        if self.rect.y < self.centro - self.delta: self.direzione = 1
-        if self.rect.y > self.centro + self.delta: self.direzione = -1
-
-
-
+        if self.rect.centery < self.centro - self.delta: self.direzione = 1
+        if self.rect.centery > self.centro + self.delta: self.direzione = -1
  
+class Cadente(Piattaforma):
+    def __init__(self, y):
+        super().__init__(y)
+        self.gravity = 0
+        self.cadi=False
+
+        self.delta= 2
+        self.centro=self.rect.centery
+        self.direzione=-1
         
+    def update(self):
+        self.rect.y+=self.direzione*3
+        if self.rect.centery < self.centro - self.delta: self.direzione = 1
+        if self.rect.centery > self.centro + self.delta: self.direzione = -1
+        self.apply_gravity()
+
+    def apply_gravity(self):
+        if self.cadi:
+            self.gravity += 1
+            self.rect.y += self.gravity
+
+
 def bool_scorrere(piattaforme, player):
 
     scorri=True

@@ -4,7 +4,7 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Piattaforma, bool_scorrere
+from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, bool_scorrere
 from punteggio import Punteggio
 
 pygame.init()
@@ -49,6 +49,10 @@ def collisions():
             inizio=False
             for i,p in enumerate(piattaforme.sprites()):
                 piattaforme.sprites()[i].corrente=False
+                if type(piattaforma) == Cadente and player.sprite.gravity>5:
+                    piattaforma.cadi = True
+                    player.sprite.salto()
+
             piattaforma.corrente = True
             return True
         
@@ -57,6 +61,16 @@ def collisions():
         return True
     
     return False
+
+def inizializza():
+    global punteggio, inizio
+    ground_rect.y = 700
+    piattaforme.empty()
+    piattaforme.add(Classica(randint(500, 600)))
+    player.sprite.rect.midbottom = (275,700)
+    punteggio=Punteggio()
+    inizio=True
+
 
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
@@ -70,7 +84,7 @@ player = pygame.sprite.GroupSingle()
 player.add(Player())
 
 piattaforme = pygame.sprite.Group()
-piattaforme.add(Piattaforma(randint(500, 600)))
+piattaforme.add(Classica(randint(500, 600)))
 
 punteggio=Punteggio()
 
@@ -97,22 +111,10 @@ while True:
 
             if event.type==MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0] and start_rect.collidepoint(pygame.mouse.get_pos()):
                 Game_Over=False
-                ground_rect.y = 700
-                piattaforme.empty()
-                piattaforme.add(Piattaforma(randint(500, 600)))
-                player.sprite.rect.midbottom = (275,700)
-                punteggio=Punteggio()
-                inizio=True
+                inizializza()
             if event.type== KEYUP and Game_Over and event.key==K_SPACE:
-                inizio=True
-                morte=False
-
-                ground_rect.y = 700
-                piattaforme.empty()
-                piattaforme.add(Piattaforma(randint(500, 600)))
-                player.sprite.rect.midbottom = (275,700)
-                punteggio=Punteggio()
-                inizio=True
+                inizializza()
+                morte = False
 
     if not Game_Over:
 
@@ -121,7 +123,8 @@ while True:
         screen.blit(ground, ground_rect)
         
         if piattaforme.sprites()[-1].rect.y > 0:
-            piattaforme.add(Piattaforma(piattaforme.sprites()[-1].rect.y + randint(-200, -150)))
+            pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
+            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos)]))
             
         salta=collisions()
         piattaforme.draw(screen)
@@ -129,11 +132,14 @@ while True:
         salta = False
         player.draw(screen)
 
-        if bool_scorrere(piattaforme, player)  and not inizio:
-            ground_rect.y+=3
-            player.sprite.rect.y+=3
+        if bool_scorrere(piattaforme, player) and not inizio:
+            ground_rect.y+=5
+            player.sprite.rect.y+=5
             for piattaforma in piattaforme:
                 piattaforma.scorri()
+
+        for piattaforma in piattaforme:   
+            piattaforma.update()
     
         punteggio.update(piattaforme, player, inizio)
         punteggio.draw(screen)
