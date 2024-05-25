@@ -19,8 +19,6 @@ class Piattaforma(pygame.sprite.Sprite):
 
     def scorri(self):
         self.rect.y+=5
-        if self.rect.y>805:
-            self.kill()
         if type(self) == Mobile_y or type(self) == Cadente:
             self.centro+=5
             

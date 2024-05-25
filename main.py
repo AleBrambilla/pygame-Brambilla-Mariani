@@ -79,12 +79,13 @@ def immagini():
     ground_rect=ground.get_rect(topleft=(0, 700))
 
     lava=pygame.image.load('Brambilla-Mariani-img/lava.png').convert_alpha()
-    lava=pygame.transform.rotozoom(lava, 0, 1.5)
-    lava_rect=lava.get_rect(center=(275, 730))
+    lava=pygame.transform.rotozoom(lava, 0, 1.8)
+    lava_rect=lava.get_rect(center=(275, 750))
 
 def RunMode_init():
     global punteggio, t_inizio, inizio
-    lava_rect.centery = 730
+    lava_rect.centery = 750
+    ground_rect.y=2000
 
     t_inizio=pygame.time.get_ticks()
 
@@ -173,6 +174,8 @@ while True:
             player.sprite.rect.y+=5
             for piattaforma in piattaforme:
                 piattaforma.scorri()
+                if piattaforma.rect.y>850:
+                    piattaforma.kill()
 
         for piattaforma in piattaforme:   
             piattaforma.update()
@@ -229,8 +232,32 @@ while True:
 
         if lava_rect.colliderect(player.sprite.rect):
             stato_precedente='run mode'
+            pygame.time.wait(500)
             stato = 'morte'
             inizio=True
+
+        if player.sprite.rect.y<30:
+            lava_rect.y+=10
+            for p in piattaforme:
+                p.rect.y+=10
+                if type(p) == Mobile_y or type(p) == Cadente:
+                    p.centro+=10
+                if p.rect.y>lava_rect.y:
+                    p.kill()
+            player.sprite.rect.y+=10
+        
+        if player.sprite.rect.y>600:
+            g+=1
+            lava_rect.y-=g
+            for p in piattaforme:
+                
+                if type(p) == Mobile_y or type(p) == Cadente:
+                    p.centro-=g
+                    #print(p.rect.y, p.centro)
+                p.rect.y-=g
+
+            player.sprite.rect.y-=g
+        g=20
 
     pygame.display.update()
     clock.tick(60)
