@@ -29,7 +29,7 @@ class Punteggio:
         punteggio_finale_rect=punteggio_finale.get_rect(center=(275,550))
 
         font3=pygame.font.Font(None, 25)
-        istruzioni=font3.render('Space Key --> Home', True, (255,255,255))
+        istruzioni=font3.render('Space Key --> Restart', True, (255,255,255))
         istruzioni_rect=istruzioni.get_rect(center=(275, 650))
 
         screen.fill((0,0,0))
