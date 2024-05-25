@@ -102,4 +102,3 @@ def bool_scorrere(piattaforme):
             scorri=False
 
     return scorri
-    

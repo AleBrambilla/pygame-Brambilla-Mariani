@@ -8,30 +8,6 @@ from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_
 from punteggio import Punteggio
 
 pygame.init()
-
-tasto_start=pygame.Surface((200, 100))
-tasto_start.fill((255,255,255))
-start_rect=tasto_start.get_rect(center=(275, 420))
-        
-font=pygame.font.Font(None, 50)
-inizio_scritta=font.render('CLASSIC', True, (0,0,0))
-inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 420))
-
-font=pygame.font.SysFont('Cooper Black', 30)
-titolo1=font.render("Ale&Davi's", False, (26,128,5))
-titolo_rect1=titolo1.get_rect(midtop=(275, 50))
-
-font=pygame.font.SysFont('Cooper Black', 90)
-titolo2=font.render("PLATFORM", False, (26,128,5))
-titolo_rect2=titolo2.get_rect(midtop=(275, 130))
-
-tasto_start2=pygame.Surface((200, 100))
-tasto_start2.fill((255,255,255))
-start_rect2=tasto_start2.get_rect(center=(275, 600))
-        
-font=pygame.font.Font(None, 50)
-inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
-inizio_scritta_rect2=inizio_scritta2.get_rect(center=(275, 600))
    
 def collisions():
     global inizio
@@ -63,13 +39,67 @@ def inizializza():
     punteggio=Punteggio()
     inizio=True
 
+def immagini():
+
+    global tasto_start, start_rect, font, inizio_scritta, inizio_scritta_rect, titolo1, titolo_rect1, titolo2, titolo_rect2, tasto_start2, start_rect2, inizio_scritta2, inizio_scritta_rect2, restart, restart_rect, image_piattaforma, ground, ground_rect, sfondo, lava, lava_rect
+    tasto_start=pygame.Surface((200, 100))
+    tasto_start.fill((255,255,255))
+    start_rect=tasto_start.get_rect(center=(275, 420))
+            
+    font=pygame.font.Font(None, 50)
+    inizio_scritta=font.render('CLASSIC', True, (0,0,0))
+    inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 420))
+
+    font=pygame.font.SysFont('Cooper Black', 30)
+    titolo1=font.render("Ale&Davi's", False, (26,128,5))
+    titolo_rect1=titolo1.get_rect(midtop=(275, 50))
+
+    font=pygame.font.SysFont('Cooper Black', 90)
+    titolo2=font.render("PLATFORM", False, (26,128,5))
+    titolo_rect2=titolo2.get_rect(midtop=(275, 130))
+
+    tasto_start2=pygame.Surface((200, 100))
+    tasto_start2.fill((255,255,255))
+    start_rect2=tasto_start2.get_rect(center=(275, 600))
+            
+    font=pygame.font.Font(None, 50)
+    inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
+    inizio_scritta_rect2=inizio_scritta2.get_rect(center=(275, 600))
+
+    restart=font.render('RESTART', True, (0,0,0))
+    restart_rect=inizio_scritta_rect
+
+    sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
+    sfondo = pygame.transform.rotozoom(sfondo, 0, 1.1)
+
+    image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
+    image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 30, 0.7)
+
+    ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
+    ground_rect=ground.get_rect(topleft=(0, 700))
+
+    lava=pygame.image.load('Brambilla-Mariani-img/lava.png').convert_alpha()
+    lava=pygame.transform.rotozoom(lava, 0, 1.5)
+    lava_rect=lava.get_rect(center=(275, 730))
+
+def RunMode_init():
+    global punteggio, inizio
+    lava_rect.centery = 730
+
+    prima=Classica(600)
+    prima.rect.centerx=275
+    piattaforme.empty()
+    piattaforme.add(prima)
+
+    player.sprite.rect.midbottom = (275,600)
+    punteggio=Punteggio()
+    inizio=True
+
+
 WINDOW_SIZE = (550, 800)
 screen = pygame.display.set_mode(WINDOW_SIZE)
-sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
-sfondo = pygame.transform.rotozoom(sfondo, 0, 1.1)
 
-ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
-ground_rect=ground.get_rect(topleft=(0, 700))
+immagini()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
@@ -78,9 +108,6 @@ piattaforme = pygame.sprite.Group()
 piattaforme.add(Classica(randint(500, 600)))
 
 punteggio=Punteggio()
-
-image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
-image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 30, 0.7)
 
 pygame.display.set_caption('Home')
 
@@ -105,12 +132,22 @@ while True:
         screen.blit(inizio_scritta2, inizio_scritta_rect2)
         screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
         screen.blit(image_piattaforma, (400, 350))
+
         if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
             stato = 'classico'
             inizializza()
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'classico'
             inizializza()
+
+        if start_rect2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+            stato = 'run mode'
+            RunMode_init()
+
+        print(stato)
+        if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
+            stato = 'run mode'
+            RunMode_init()
 
     if stato == 'classico':
         
@@ -146,9 +183,43 @@ while True:
 
     elif stato == 'morte':
         punteggio.draw_finale(screen)
-        for event in pygame.event.get():
-            if event.type== KEYUP and event.key==K_SPACE:
-                stato = 'home'
+
+        screen.blit(tasto_start, start_rect)
+        screen.blit(restart, restart_rect)
+        if event.type== KEYUP and event.key==K_SPACE:
+            stato = 'home'
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+            stato = 'classico'
+            inizializza()
+
+    elif stato == 'run mode':
+
+        pygame.display.set_caption('RunMode')
+        screen.blit(sfondo, (0,0))
+        screen.blit(lava, lava_rect)
+
+        VEL_AVANZ=1+pygame.time.get_ticks()//15000/2
+
+        if piattaforme.sprites()[-1].rect.y > 0:
+            pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
+            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
+        piattaforme.draw(screen)
+        
+        salta=collisions()
+        player.update(inizio, salta)
+        player.draw(screen)
+
+        for piattaforma in piattaforme:   
+            piattaforma.update()
+            piattaforma.rect.y+=VEL_AVANZ
+
+    
+        punteggio.RunMode(VEL_AVANZ)
+        punteggio.draw(screen)
+
+        if lava_rect.colliderect(player.sprite.rect):
+            stato = 'morte'
+            inizio=True
 
     pygame.display.update()
     clock.tick(60)
