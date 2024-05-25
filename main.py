@@ -83,15 +83,17 @@ def immagini():
     lava_rect=lava.get_rect(center=(275, 730))
 
 def RunMode_init():
-    global punteggio, inizio
+    global punteggio, t_inizio, inizio
     lava_rect.centery = 730
 
-    prima=Classica(600)
+    t_inizio=pygame.time.get_ticks()
+
+    prima=Classica(350)
     prima.rect.centerx=275
     piattaforme.empty()
     piattaforme.add(prima)
 
-    player.sprite.rect.midbottom = (275,600)
+    player.sprite.rect.midbottom = (275,320)
     punteggio=Punteggio()
     inizio=True
 
@@ -144,7 +146,7 @@ while True:
             stato = 'run mode'
             RunMode_init()
 
-        print(stato)
+        #print(stato)
         if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'run mode'
             RunMode_init()
@@ -178,6 +180,7 @@ while True:
         punteggio.draw(screen)
 
         if player.sprite.rect.y>800:
+            stato_precedente='classico'
             stato = 'morte'
             inizio=True
 
@@ -189,8 +192,11 @@ while True:
         if event.type== KEYUP and event.key==K_SPACE:
             stato = 'home'
         if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
-            stato = 'classico'
-            inizializza()
+            stato = stato_precedente
+            if stato=='classico':
+                inizializza()
+            else:
+                RunMode_init()
 
     elif stato == 'run mode':
 
@@ -198,7 +204,7 @@ while True:
         screen.blit(sfondo, (0,0))
         screen.blit(lava, lava_rect)
 
-        VEL_AVANZ=1+pygame.time.get_ticks()//15000/2
+        VEL_AVANZ=1+(pygame.time.get_ticks()-t_inizio)//15000
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
@@ -212,12 +218,15 @@ while True:
         for piattaforma in piattaforme:   
             piattaforma.update()
             piattaforma.rect.y+=VEL_AVANZ
+            if type(piattaforma) == Mobile_y or type(piattaforma) == Cadente:
+                piattaforma.centro+=VEL_AVANZ
 
     
         punteggio.RunMode(VEL_AVANZ)
         punteggio.draw(screen)
 
         if lava_rect.colliderect(player.sprite.rect):
+            stato_precedente='run mode'
             stato = 'morte'
             inizio=True
 

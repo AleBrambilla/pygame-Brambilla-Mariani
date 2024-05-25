@@ -13,7 +13,7 @@ class Punteggio:
             self.ammontare+=1
 
     def RunMode(self, VEL_AVANZ):
-        self.ammontare+=VEL_AVANZ/5
+        self.ammontare+=VEL_AVANZ/3
 
     def draw(self, screen):
         self.text=self.font.render(f'score: {int(self.ammontare)}', True, (255,0,0))
