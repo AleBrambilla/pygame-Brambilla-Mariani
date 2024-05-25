@@ -4,7 +4,7 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere, platform_list
+from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere #, platform_list
 from punteggio import Punteggio
 
 pygame.init()
