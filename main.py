@@ -4,7 +4,7 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere
+from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere, platform_list
 from punteggio import Punteggio
 
 pygame.init()
@@ -93,7 +93,7 @@ def RunMode_init():
     piattaforme.empty()
     piattaforme.add(prima)
 
-    player.sprite.rect.midbottom = (275,320)
+    player.sprite.rect.midbottom = (275,300)
     punteggio=Punteggio()
     inizio=True
 
@@ -153,13 +153,14 @@ while True:
 
     if stato == 'classico':
         
-        pygame.display.set_caption('Game')
+        pygame.display.set_caption('Classic Mode')
         screen.blit(sfondo, (0,0))
         screen.blit(ground, ground_rect)
         
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
+            l=platform_list(pos, punteggio.ammontare)
+            piattaforme.add(choice(l))
             
         salta=collisions()
         piattaforme.draw(screen)
@@ -200,7 +201,7 @@ while True:
 
     elif stato == 'run mode':
 
-        pygame.display.set_caption('RunMode')
+        pygame.display.set_caption('Run Mode')
         screen.blit(sfondo, (0,0))
         screen.blit(lava, lava_rect)
 
@@ -208,7 +209,8 @@ while True:
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
+            l=platform_list(pos, punteggio.ammontare)
+            piattaforme.add(choice(l))
         piattaforme.draw(screen)
         
         salta=collisions()
