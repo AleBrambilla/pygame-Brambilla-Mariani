@@ -83,11 +83,9 @@ def immagini():
     lava_rect=lava.get_rect(center=(275, 750))
 
 def RunMode_init():
-    global punteggio, t_inizio, inizio
+    global punteggio, inizio
     lava_rect.centery = 750
     ground_rect.y=2000
-
-    t_inizio=pygame.time.get_ticks()
 
     prima=Classica(350)
     prima.rect.centerx=275
@@ -208,7 +206,7 @@ while True:
         screen.blit(sfondo, (0,0))
         screen.blit(lava, lava_rect)
 
-        VEL_AVANZ=1+(pygame.time.get_ticks()-t_inizio)//15000
+        VEL_AVANZ=2+punteggio.ammontare//500
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
@@ -247,7 +245,7 @@ while True:
             player.sprite.rect.y+=10
         
         if player.sprite.rect.y>600:
-            g+=1
+            g+=player.sprite.gravity
             lava_rect.y-=g
             for p in piattaforme:
                 
