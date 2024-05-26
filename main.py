@@ -120,17 +120,14 @@ stato = 'home'
 stato_precedente=None
 
 while True:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-    
-#    if stato_precedente == 'morte' and stato == 'home':
-#        pygame.time.wait(400)
-#        stato_precedente=None
-#        stato = 'home'
-
+        
     if stato == 'home':
+
         screen.fill((0,200,250))
         screen.blit(tasto_start, start_rect)
         screen.blit(inizio_scritta, inizio_scritta_rect)
@@ -141,19 +138,24 @@ while True:
         screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
         screen.blit(image_piattaforma, (400, 350))
 
-        if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
             stato = 'classico'
             inizializza()
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'classico'
             inizializza()
 
-        if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+        if start_rect2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
             stato = 'run mode'
             RunMode_init()
+
         if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'run mode'
             RunMode_init()
+
+    elif stato_precedente == 'morte' and event.type==MOUSEBUTTONUP and event.button==1:
+        stato_precedente=None
+        stato='home'
 
     elif stato == 'classico':
       
@@ -250,16 +252,11 @@ while True:
         punteggio.draw_finale(screen)
         screen.blit(tasto_home, home_rect)
         screen.blit(home_scritta, home_scritta_rect)
-
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and home_rect.collidepoint(pygame.mouse.get_pos()):
-        #    pygame.time.wait(400)
-            stato = 'home'
-            stato_precedente = 'morte'
-        if home_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
-        #    pygame.time.wait(400)
-            stato = 'home'
-            stato_precedente = 'morte'
-        if event.type== KEYUP and event.key==K_SPACE:
+        if home_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:  
+            stato_precedente='morte'
+        if event.type== KEYUP and event.key==K_KP_ENTER:
+            stato_precedente='morte'
+        if event.type== KEYUP and event.key==K_SPACE and not pygame.mouse.get_pressed()[0]: #perché premendo spazio con il tasto sinistro premuto dava gameover con punteggio 0
             stato = stato_precedente
             if stato=='classico':
                 inizializza()
@@ -268,5 +265,4 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
-    
 
