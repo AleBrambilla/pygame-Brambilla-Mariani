@@ -120,14 +120,16 @@ stato = 'home'
 stato_precedente=None
 
 while True:
-
-    
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        
+    
+#    if stato_precedente == 'morte' and stato == 'home':
+#        pygame.time.wait(400)
+#        stato_precedente=None
+#        stato = 'home'
+
     if stato == 'home':
         screen.fill((0,200,250))
         screen.blit(tasto_start, start_rect)
@@ -139,25 +141,19 @@ while True:
         screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
         screen.blit(image_piattaforma, (400, 350))
 
-        if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             stato = 'classico'
             inizializza()
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'classico'
             inizializza()
 
-        if start_rect2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             stato = 'run mode'
             RunMode_init()
-
         if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'run mode'
             RunMode_init()
-
-    elif stato_precedente == 'morte':
-        pygame.time.wait(200)
-        stato_precedente=None
-        stato='home'
 
     elif stato == 'classico':
       
@@ -169,7 +165,6 @@ while True:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
             l=platform_list(pos, punteggio.ammontare)
             piattaforme.add(choice(l))
-            # piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
             
         salta=collisions()
         piattaforme.draw(screen)
@@ -206,7 +201,6 @@ while True:
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            #piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos)]))
             l=platform_list(pos, punteggio.ammontare)
             piattaforme.add(choice(l))
         piattaforme.draw(screen)
@@ -256,10 +250,15 @@ while True:
         punteggio.draw_finale(screen)
         screen.blit(tasto_home, home_rect)
         screen.blit(home_scritta, home_scritta_rect)
-        if home_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:  
-            stato_precedente='morte'
-        if event.type== KEYUP and event.key==K_KP_ENTER:
-            stato_precedente='morte'
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and home_rect.collidepoint(pygame.mouse.get_pos()):
+        #    pygame.time.wait(400)
+            stato = 'home'
+            stato_precedente = 'morte'
+        if home_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
+        #    pygame.time.wait(400)
+            stato = 'home'
+            stato_precedente = 'morte'
         if event.type== KEYUP and event.key==K_SPACE:
             stato = stato_precedente
             if stato=='classico':
