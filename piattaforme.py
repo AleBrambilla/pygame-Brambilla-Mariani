@@ -99,17 +99,17 @@ def bool_scorrere(piattaforme):
 
     return scorri
 
-#def platform_list(pos, score):
-#    l=[Classica(pos) for _ in range(3)]
-#    if score>200:
-#        l.append(Cadente(pos))
-#    if score>300:
-#        l.append(Mobile_y(pos))
-#    if score>500:
-#        l.append(Mobile_x(pos))
-#    if score>-1:
-#        l.append(Temporanea(pos))
-#    if score>1000:
-#        l.pop(0)                          #così aggiunge a ogni frame
+def platform_list(pos, score):
+   l=[Classica(pos) for _ in range(3)]
+   if score>200:
+       l.append(Cadente(pos))
+   if score>300:
+       l.append(Mobile_y(pos))
+   if score>500:
+       l.append(Mobile_x(pos))
+   if score>700:
+       l.append(Temporanea(pos))
+   if score>1000:
+       l.pop(0)                          
 
-#    return l
+   return l

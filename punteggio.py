@@ -30,7 +30,7 @@ class Punteggio:
 
         font3=pygame.font.Font(None, 25)
         istruzioni=font3.render('Space Key --> Restart', True, (255,255,255))
-        istruzioni_rect=istruzioni.get_rect(center=(275, 650))
+        istruzioni_rect=istruzioni.get_rect(center=(275, 750))
 
         screen.fill((0,0,0))
         screen.blit(gameover, gameover_rect)

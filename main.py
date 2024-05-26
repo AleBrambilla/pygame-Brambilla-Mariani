@@ -4,7 +4,7 @@ from sys import exit
 from random import randint, choice
 
 from player import Player
-from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere #, platform_list
+from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere , platform_list
 from punteggio import Punteggio
 
 pygame.init()
@@ -84,12 +84,12 @@ image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').conver
 image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 30, 0.7)
 
 #morte
-tasto_restart=pygame.Surface((200, 100))
-tasto_restart.fill((255,255,255))
-restart_rect=tasto_restart.get_rect(center=(275, 250))
+tasto_home=pygame.Surface((200, 100))
+tasto_home.fill((255,255,255))
+home_rect=tasto_home.get_rect(center=(275, 350))
 
-restart_scritta=font.render('HOME', True, (0,0,0))
-restart_scritta_rect=restart_scritta.get_rect(center=(275, 250))
+home_scritta=font.render('HOME', True, (0,0,0))
+home_scritta_rect=home_scritta.get_rect(center=(275, 350))
 
 # gioco
 sfondo = pygame.image.load('Brambilla-Mariani-img/sfondo.png').convert()
@@ -159,9 +159,9 @@ while True:
         
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-        #    l=platform_list(pos, punteggio.ammontare)
-        #    piattaforme.add(choice(l))
-            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
+            l=platform_list(pos, punteggio.ammontare)
+            piattaforme.add(choice(l))
+            # piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos), Temporanea(pos)]))
             
         salta=collisions()
         piattaforme.draw(screen)
@@ -198,9 +198,9 @@ while True:
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos)]))
-        #    l=platform_list(pos, punteggio.ammontare)
-        #    piattaforme.add(choice(l))
+            #piattaforme.add(choice([Classica(pos), Classica(pos), Classica(pos), Mobile_x(pos), Mobile_y(pos), Cadente(pos)]))
+            l=platform_list(pos, punteggio.ammontare)
+            piattaforme.add(choice(l))
         piattaforme.draw(screen)
         
         salta=collisions()
@@ -246,9 +246,9 @@ while True:
 
     elif stato == 'morte':
         punteggio.draw_finale(screen)
-        screen.blit(tasto_restart, restart_rect)
-        screen.blit(restart_scritta, restart_scritta_rect)
-        if restart_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:  
+        screen.blit(tasto_home, home_rect)
+        screen.blit(home_scritta, home_scritta_rect)
+        if home_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:  
             stato = 'home'
         if event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'home'
