@@ -117,8 +117,11 @@ pygame.display.set_caption('Home')
 clock = pygame.time.Clock()
 
 stato = 'home'
+stato_precedente=None
 
 while True:
+
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -151,7 +154,12 @@ while True:
             stato = 'run mode'
             RunMode_init()
 
-    if stato == 'classico':
+    elif stato_precedente == 'morte':
+        pygame.time.wait(200)
+        stato_precedente=None
+        stato='home'
+
+    elif stato == 'classico':
       
         pygame.display.set_caption('Classic Mode')
         screen.blit(sfondo, (0,0))
@@ -249,9 +257,9 @@ while True:
         screen.blit(tasto_home, home_rect)
         screen.blit(home_scritta, home_scritta_rect)
         if home_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:  
-            stato = 'home'
+            stato_precedente='morte'
         if event.type== KEYUP and event.key==K_KP_ENTER:
-            stato = 'home'
+            stato_precedente='morte'
         if event.type== KEYUP and event.key==K_SPACE:
             stato = stato_precedente
             if stato=='classico':
