@@ -138,14 +138,14 @@ while True:
         screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
         screen.blit(image_piattaforma, (400, 350))
 
-        if start_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
             stato = 'classico'
             inizializza()
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'classico'
             inizializza()
 
-        if start_rect2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
             stato = 'run mode'
             RunMode_init()
 
@@ -153,7 +153,7 @@ while True:
             stato = 'run mode'
             RunMode_init()
 
-    elif stato_precedente == 'morte' and event.type==MOUSEBUTTONUP and event.button==1:
+    elif stato_precedente == 'morte' and event.type==MOUSEBUTTONUP and event.button==1 and home_rect.collidepoint(pygame.mouse.get_pos()):
         stato_precedente=None
         stato='home'
 
