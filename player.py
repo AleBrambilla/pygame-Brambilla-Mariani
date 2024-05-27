@@ -22,7 +22,8 @@ class Player(pygame.sprite.Sprite):
         self.gravity=-22
 
     def apply_gravity(self):
-        self.gravity += 1
+        if self.gravity<22:
+            self.gravity += 1
         self.rect.y += self.gravity
 
     def movimento(self):

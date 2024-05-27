@@ -58,11 +58,11 @@ screen = pygame.display.set_mode((550, 800))
 # home
 tasto_start=pygame.Surface((200, 100))
 tasto_start.fill((255,255,255))
-start_rect=tasto_start.get_rect(center=(275, 420))
+start_rect=tasto_start.get_rect(center=(150, 650))
             
 font=pygame.font.Font(None, 50)
 inizio_scritta=font.render('CLASSIC', True, (0,0,0))
-inizio_scritta_rect=inizio_scritta.get_rect(center=(275, 420))
+inizio_scritta_rect=inizio_scritta.get_rect(center=(150, 650))
 
 font=pygame.font.SysFont('Cooper Black', 30)
 titolo1=font.render("Ale&Davi's", False, (26,128,5))
@@ -74,14 +74,14 @@ titolo_rect2=titolo2.get_rect(midtop=(275, 130))
 
 tasto_start2=pygame.Surface((200, 100))
 tasto_start2.fill((255,255,255))
-start_rect2=tasto_start2.get_rect(center=(275, 600))
+start_rect2=tasto_start2.get_rect(center=(400, 650))
             
 font=pygame.font.Font(None, 50)
 inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
-inizio_scritta_rect2=inizio_scritta2.get_rect(center=(275, 600))
+inizio_scritta_rect2=inizio_scritta2.get_rect(center=(400, 650))
 
 image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
-image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 30, 0.7)
+image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 0, 1.7)
 
 #morte
 tasto_home=pygame.Surface((200, 100))
@@ -135,8 +135,8 @@ while True:
         screen.blit(titolo2, titolo_rect2)
         screen.blit(tasto_start2, start_rect2)
         screen.blit(inizio_scritta2, inizio_scritta_rect2)
-        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.3), (25, 550))
-        screen.blit(image_piattaforma, (400, 350))
+        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.7), (220, 250))
+        screen.blit(image_piattaforma, (140, 450))
 
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
             stato = 'classico'
@@ -211,6 +211,7 @@ while True:
         player.update(inizio, salta)
         player.draw(screen)
 
+        player.sprite.rect.y+=VEL_AVANZ
         for piattaforma in piattaforme:   
             piattaforma.update()
             piattaforma.rect.y+=VEL_AVANZ
@@ -226,15 +227,15 @@ while True:
             stato = 'morte'
             inizio=True
 
-        if player.sprite.rect.y<30:
-            lava_rect.y+=10
+        if player.sprite.rect.y<200:
+            lava_rect.y+=7
             for p in piattaforme:
-                p.rect.y+=10
+                p.rect.y+=7
                 if type(p) == Mobile_y or type(p) == Cadente:
-                    p.centro+=10
+                    p.centro+=7
                 if p.rect.y>lava_rect.y:
                     p.kill()
-            player.sprite.rect.y+=10
+            player.sprite.rect.y+=7
         
         if player.sprite.rect.y>600:
             g+=player.sprite.gravity
