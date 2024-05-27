@@ -6,6 +6,8 @@ from random import randint, choice
 from player import Player
 from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere , platform_list
 from punteggio import Punteggio
+from impostazioni import init_impostazioni, change
+
 
 pygame.init()
    
@@ -53,6 +55,7 @@ def RunMode_init():
     punteggio=Punteggio()
     inizio=True
 
+
 screen = pygame.display.set_mode((550, 800))
 
 # home
@@ -83,6 +86,19 @@ inizio_scritta_rect2=inizio_scritta2.get_rect(center=(400, 650))
 image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
 image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 0, 1.7)
 
+#impostazioni
+impostazioni=pygame.Surface((40,40))
+impostazioni_rect=impostazioni.get_rect(topleft=(500,10))
+rotella=pygame.transform.rotozoom(pygame.image.load('Brambilla-Mariani-img/ingranaggio.png').convert_alpha(), 0, 0.2)
+rotella_rect=rotella.get_rect(topleft=(500,10))
+
+home=pygame.transform.rotozoom(pygame.image.load('Brambilla-Mariani-img/home.png').convert_alpha(), 0, 0.1)
+rect_home=home.get_rect(topleft=(10,10))
+home_tasto=pygame.Surface((50, 50))
+home_tasto.fill((255,255,255))
+home_tasto_rect=home_tasto.get_rect(topleft=(10,10))
+
+
 #morte
 tasto_home=pygame.Surface((200, 100))
 tasto_home.fill((255,255,255))
@@ -109,6 +125,12 @@ player.add(Player())
 
 piattaforme = pygame.sprite.Group()
 piattaforme.add(Classica(randint(500, 600)))
+
+mobile_x=True
+mobile_y=True
+temporanea=True
+cadente=True
+booleane=[temporanea,cadente, mobile_x, mobile_y]
 
 punteggio=Punteggio()
 
@@ -137,6 +159,8 @@ while True:
         screen.blit(inizio_scritta2, inizio_scritta_rect2)
         screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.7), (220, 250))
         screen.blit(image_piattaforma, (140, 450))
+        screen.blit(impostazioni, impostazioni_rect)
+        screen.blit(rotella, rotella_rect)
 
         if start_rect.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
             stato = 'classico'
@@ -152,10 +176,26 @@ while True:
         if start_rect2.collidepoint(pygame.mouse.get_pos()) and event.type== KEYUP and event.key==K_KP_ENTER:
             stato = 'run mode'
             RunMode_init()
+        
+        if impostazioni_rect.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
+            stato='impostazioni'
 
     elif stato_precedente == 'morte' and event.type==MOUSEBUTTONUP and event.button==1 and home_rect.collidepoint(pygame.mouse.get_pos()):
         stato_precedente=None
         stato='home'
+
+    elif stato == 'impostazioni':
+        rect=init_impostazioni(screen, booleane)
+
+        screen.blit(home_tasto, home_tasto_rect)
+        screen.blit(home, rect_home)
+
+        if rect_home.collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
+            stato='home'
+
+        for i in range(4):
+            if rect[i].collidepoint(pygame.mouse.get_pos()) and event.type==MOUSEBUTTONUP and event.button==1:
+                booleane[i]=change(booleane[i])
 
     elif stato == 'classico':
       
@@ -165,7 +205,7 @@ while True:
         
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            l=platform_list(pos, punteggio.ammontare)
+            l=platform_list(pos, punteggio.ammontare, booleane)
             piattaforme.add(choice(l))
             
         salta=collisions()
@@ -203,7 +243,7 @@ while True:
 
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
-            l=platform_list(pos, punteggio.ammontare)
+            l=platform_list(pos, punteggio.ammontare, booleane)
             piattaforme.add(choice(l))
         piattaforme.draw(screen)
         
