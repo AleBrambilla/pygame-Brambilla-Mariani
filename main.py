@@ -8,7 +8,6 @@ from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_
 from punteggio import Punteggio
 from impostazioni import init_impostazioni, change
 
-
 pygame.init()
    
 def collisions():
@@ -29,7 +28,6 @@ def collisions():
     if player.sprite.rect.bottom>=ground_rect.top:
         inizio = True
         return True
-    
     return False
 
 def inizializza():
@@ -54,7 +52,6 @@ def RunMode_init():
     player.sprite.rect.midbottom = (275,300)
     punteggio=Punteggio()
     inizio=True
-
 
 screen = pygame.display.set_mode((550, 800))
 
@@ -97,7 +94,6 @@ rect_home=home.get_rect(topleft=(10,10))
 home_tasto=pygame.Surface((50, 50))
 home_tasto.fill((255,255,255))
 home_tasto_rect=home_tasto.get_rect(topleft=(10,10))
-
 
 #morte
 tasto_home=pygame.Surface((200, 100))
@@ -237,46 +233,38 @@ while True:
 
         pygame.display.set_caption('Run Mode')
         screen.blit(sfondo, (0,0))
-        screen.blit(lava, lava_rect)
-
-        VEL_AVANZ=2+punteggio.ammontare//500
-
+        screen.blit(ground, ground_rect)
+        
         if piattaforme.sprites()[-1].rect.y > 0:
             pos=piattaforme.sprites()[-1].rect.y + randint(-200, -150)
             l=platform_list(pos, punteggio.ammontare, booleane)
             piattaforme.add(choice(l))
-        piattaforme.draw(screen)
-        
+            
         salta=collisions()
+        piattaforme.draw(screen)
         player.update(inizio, salta)
+        salta = False
         player.draw(screen)
 
-        player.sprite.rect.y+=VEL_AVANZ
+        if bool_scorrere(piattaforme) and not inizio:
+            ground_rect.y+=5
+            player.sprite.rect.y+=5
+            for piattaforma in piattaforme:
+                piattaforma.scorri()
+                if piattaforma.rect.y>850:
+                    piattaforma.kill()
+
         for piattaforma in piattaforme:   
             piattaforma.update()
-            piattaforma.rect.y+=VEL_AVANZ
-            if type(piattaforma) == Mobile_y or type(piattaforma) == Cadente:
-                piattaforma.centro+=VEL_AVANZ
-    
-        punteggio.RunMode(VEL_AVANZ)
-        punteggio.draw(screen)
-
-        if lava_rect.colliderect(player.sprite.rect):
-            stato_precedente='run mode'
-            pygame.time.wait(500)
-            stato = 'morte'
-            inizio=True
-
-        if player.sprite.rect.y<200:
-            lava_rect.y+=7
-            for p in piattaforme:
-                p.rect.y+=7
-                if type(p) == Mobile_y or type(p) == Cadente:
-                    p.centro+=7
-                if p.rect.y>lava_rect.y:
-                    p.kill()
-            player.sprite.rect.y+=7
         
+        lava_rect.y -= 2
+        if lava_rect.y > 1200:
+            lava_rect.y = 1200
+        print(lava_rect.y)
+
+        if bool_scorrere(piattaforme):
+            lava_rect.y += 5
+
         if player.sprite.rect.y>600:
             g+=player.sprite.gravity
             lava_rect.y-=g
@@ -288,6 +276,16 @@ while True:
 
             player.sprite.rect.y-=g
         g=20
+
+        punteggio.update(piattaforme, player, inizio)
+        punteggio.draw(screen)
+        screen.blit(lava, lava_rect)       
+
+        if lava_rect.colliderect(player.sprite.rect):
+            stato_precedente='run mode'
+            pygame.time.wait(500)
+            stato = 'morte'
+            inizio=True
 
     elif stato == 'morte':
         punteggio.draw_finale(screen)
