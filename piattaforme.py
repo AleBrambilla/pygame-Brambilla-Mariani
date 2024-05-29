@@ -63,7 +63,7 @@ class Cadente(Piattaforma):
         self.direzione=-1
         
     def update(self):
-        self.rect.y+=self.direzione*3
+        self.rect.y+=self.direzione*4
         if self.rect.centery < self.centro - self.delta: self.direzione = 1
         if self.rect.centery > self.centro + self.delta: self.direzione = -1
         self.apply_gravity()

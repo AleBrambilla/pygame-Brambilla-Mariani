@@ -254,16 +254,25 @@ while True:
                 if piattaforma.rect.colliderect(lava_rect):
                     piattaforma.kill()
 
+        aumento = 2
+        if punteggio.ammontare > 1500:
+            if punteggio.ammontare > 4500:
+                aumento = 4
+            else:
+                aumento = 3
+        limite = 1500
+        if punteggio.ammontare > 3000:
+            limite = 1200
         for piattaforma in piattaforme:   
             piattaforma.update()
         if lava_rect.centery>720:
-            lava_rect.y -= 1+punteggio.ammontare//500
+            lava_rect.y -= aumento
         else:
             for piattaforma in piattaforme:
-                piattaforma.rect.y+=1+punteggio.ammontare//500
-            player.sprite.rect.y+=1+punteggio.ammontare//500
-        if lava_rect.y > 1500:
-            lava_rect.y = 1500
+                piattaforma.rect.y += aumento
+            player.sprite.rect.y += aumento
+        if lava_rect.y > limite:
+            lava_rect.y = limite
 
         if bool_scorrere(piattaforme):
             lava_rect.y += 5
@@ -280,7 +289,7 @@ while True:
             player.sprite.rect.y-=g
         g=20
 
-        punteggio.update(piattaforme, player, inizio)
+        punteggio.ammontare+=(2+aumento)//2
         punteggio.draw(screen)
         screen.blit(lava, lava_rect)       
 
