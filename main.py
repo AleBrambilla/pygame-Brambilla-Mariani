@@ -257,14 +257,13 @@ while True:
         for piattaforma in piattaforme:   
             piattaforma.update()
         if lava_rect.centery>720:
-            lava_rect.y -= 2+punteggio.ammontare//500
+            lava_rect.y -= 1+punteggio.ammontare//500
         else:
             for piattaforma in piattaforme:
-                piattaforma.rect.y+=2+punteggio.ammontare//500
-            player.sprite.rect.y+=2+punteggio.ammontare//500
+                piattaforma.rect.y+=1+punteggio.ammontare//500
+            player.sprite.rect.y+=1+punteggio.ammontare//500
         if lava_rect.y > 1500:
             lava_rect.y = 1500
-        print(lava_rect.y)
 
         if bool_scorrere(piattaforme):
             lava_rect.y += 5
