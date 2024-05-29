@@ -113,7 +113,7 @@ ground_rect=ground.get_rect(topleft=(0, 700))
 
 # solo run
 lava=pygame.image.load('Brambilla-Mariani-img/lava.png').convert_alpha()
-lava=pygame.transform.rotozoom(lava, 0, 1.8)
+lava=pygame.transform.rotozoom(lava, 0, 2.5)
 lava_rect=lava.get_rect(center=(275, 750))
 
 player = pygame.sprite.GroupSingle()
@@ -251,15 +251,19 @@ while True:
             player.sprite.rect.y+=5
             for piattaforma in piattaforme:
                 piattaforma.scorri()
-                if piattaforma.rect.y>850:
+                if piattaforma.rect.colliderect(lava_rect):
                     piattaforma.kill()
 
         for piattaforma in piattaforme:   
             piattaforma.update()
-        
-        lava_rect.y -= 2
-        if lava_rect.y > 1200:
-            lava_rect.y = 1200
+        if lava_rect.centery>720:
+            lava_rect.y -= 2+punteggio.ammontare//500
+        else:
+            for piattaforma in piattaforme:
+                piattaforma.rect.y+=2+punteggio.ammontare//500
+            player.sprite.rect.y+=2+punteggio.ammontare//500
+        if lava_rect.y > 1500:
+            lava_rect.y = 1500
         print(lava_rect.y)
 
         if bool_scorrere(piattaforme):
