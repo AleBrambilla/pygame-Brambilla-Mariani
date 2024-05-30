@@ -206,7 +206,7 @@ while True:
             
         salta=collisions()
         piattaforme.draw(screen)
-        player.update(inizio, salta)
+        player.update(salta)
         salta = False
         player.draw(screen)
 
@@ -242,7 +242,7 @@ while True:
             
         salta=collisions()
         piattaforme.draw(screen)
-        player.update(inizio, salta)
+        player.update(salta)
         salta = False
         player.draw(screen)
 
@@ -289,7 +289,7 @@ while True:
             player.sprite.rect.y-=g
         g=20
 
-        punteggio.ammontare+=(2+aumento)//2
+        punteggio.ammontare+=aumento/3
         punteggio.draw(screen)
         screen.blit(lava, lava_rect)       
 
