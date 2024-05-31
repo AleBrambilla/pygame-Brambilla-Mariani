@@ -7,6 +7,7 @@ from player import Player
 from piattaforme import Cadente, Classica, Mobile_x, Mobile_y, Temporanea, bool_scorrere , platform_list
 from punteggio import Punteggio
 from impostazioni import init_impostazioni, change
+from sfondo import anima_home
 
 pygame.init()
    
@@ -56,29 +57,29 @@ def RunMode_init():
 screen = pygame.display.set_mode((550, 800))
 
 # home
-tasto_start=pygame.Surface((200, 100))
-tasto_start.fill((255,255,255))
-start_rect=tasto_start.get_rect(center=(150, 650))
+tasto_start=pygame.Surface((200, 80))
+tasto_start.fill((13, 245, 23))
+start_rect=tasto_start.get_rect(center=(150, 655))
             
 font=pygame.font.Font(None, 50)
-inizio_scritta=font.render('CLASSIC', True, (0,0,0))
-inizio_scritta_rect=inizio_scritta.get_rect(center=(150, 650))
+inizio_scritta=font.render('CLASSICA', True, (0,0,0))
+inizio_scritta_rect=inizio_scritta.get_rect(center=(150, 655))
 
 font=pygame.font.SysFont('Cooper Black', 30)
-titolo1=font.render("Ale&Davi's", False, (26,128,5))
-titolo_rect1=titolo1.get_rect(midtop=(275, 50))
+titolo1=font.render("Ale&Davi's", False, (147, 7, 245))
+titolo_rect1=titolo1.get_rect(midtop=(275, 110))
 
 font=pygame.font.SysFont('Cooper Black', 90)
-titolo2=font.render("PLATFORM", False, (26,128,5))
-titolo_rect2=titolo2.get_rect(midtop=(275, 130))
+titolo2=font.render("PLATFORM", False, (147, 7, 245))
+titolo_rect2=titolo2.get_rect(midtop=(275, 340))
 
-tasto_start2=pygame.Surface((200, 100))
-tasto_start2.fill((255,255,255))
-start_rect2=tasto_start2.get_rect(center=(400, 650))
+tasto_start2=pygame.Surface((200, 80))
+tasto_start2.fill((13, 245, 23))
+start_rect2=tasto_start2.get_rect(center=(400, 655))
             
 font=pygame.font.Font(None, 50)
 inizio_scritta2=font.render('RUN MODE', True, (0,0,0))
-inizio_scritta_rect2=inizio_scritta2.get_rect(center=(400, 650))
+inizio_scritta_rect2=inizio_scritta2.get_rect(center=(400, 655))
 
 image_piattaforma=pygame.image.load('Brambilla-Mariani-img/platform.png').convert_alpha()
 image_piattaforma=pygame.transform.rotozoom(image_piattaforma, 0, 1.7)
@@ -137,6 +138,11 @@ clock = pygame.time.Clock()
 stato = 'home'
 stato_precedente=None
 
+#animazione
+global fase, prossima
+fase = 'animazione'
+prossima = 5
+
 while True:
 
     for event in pygame.event.get():
@@ -146,15 +152,13 @@ while True:
         
     if stato == 'home':
 
-        screen.fill((0,200,250))
+        anima_home()
         screen.blit(tasto_start, start_rect)
         screen.blit(inizio_scritta, inizio_scritta_rect)
         screen.blit(titolo1, titolo_rect1)
         screen.blit(titolo2, titolo_rect2)
         screen.blit(tasto_start2, start_rect2)
         screen.blit(inizio_scritta2, inizio_scritta_rect2)
-        screen.blit(pygame.transform.rotozoom(player.sprite.image, 0, 1.7), (220, 250))
-        screen.blit(image_piattaforma, (140, 450))
         screen.blit(impostazioni, impostazioni_rect)
         screen.blit(rotella, rotella_rect)
 
