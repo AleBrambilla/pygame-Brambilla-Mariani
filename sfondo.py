@@ -83,7 +83,7 @@ def anima_home():
             player.sprite.rect.center = (listax[-1], 850)
             fase = 'preparazione'
 
-        player.update(salta)
+        player.update(salta, 'home')
         salta = False
     
     screen.blit(sfondo, (0,0))

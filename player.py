@@ -19,31 +19,34 @@ class Player(pygame.sprite.Sprite):
         self.image = alto_destra
         self.rect = self.image.get_rect(midbottom = (275,700))
         self.gravity = 0
+        self.jump_sound = pygame.mixer.Sound('Brambilla-Mariani-img/jump.mp3')
 
         self.inizio=True
 
     def salto(self):
         self.gravity=-22
+        self.jump_sound.play()
 
     def apply_gravity(self):
         if self.gravity<22:
             self.gravity += 1
         self.rect.y += self.gravity
 
-    def movimento(self):
-        keys = pygame.key.get_pressed()
-        if keys[K_LEFT]:
-            self.rect.x -= 5
-            self.img = self.img_sinistra
-        if keys[K_RIGHT]:
-            self.rect.x += 5
-            self.img = self.img_destra
+    def movimento(self, stato):
+        if stato != 'home':
+            keys = pygame.key.get_pressed()
+            if keys[K_LEFT]:
+                self.rect.x -= 5
+                self.img = self.img_sinistra
+            if keys[K_RIGHT]:
+                self.rect.x += 5
+                self.img = self.img_destra
 
-        if self.rect.centerx  > 550:
-            self.rect.x = -20
+            if self.rect.centerx  > 550:
+                self.rect.x = -20
 
-        if self.rect.centerx < 0:
-            self.rect.right=570
+            if self.rect.centerx < 0:
+                self.rect.right=570
 
     def anima(self):
         if self.gravity>0:
@@ -51,12 +54,12 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image=self.img[0]
 
-    def update(self, salta):
+    def update(self, salta, stato):
         if salta and self.gravity>5:
             self.salto()
         self.anima()
         self.apply_gravity()
-        self.movimento()
+        self.movimento(stato)
         
 
 

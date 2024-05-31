@@ -111,11 +111,13 @@ sfondo = pygame.transform.rotozoom(sfondo, 0, 1.1)
 # solo classico
 ground = pygame.image.load('Brambilla-Mariani-img/ground.png').convert()
 ground_rect=ground.get_rect(topleft=(0, 700))
+urlo_morte = pygame.mixer.Sound('Brambilla-Mariani-img/suono-morte.mp3')
 
 # solo run
 lava=pygame.image.load('Brambilla-Mariani-img/lava.png').convert_alpha()
 lava=pygame.transform.rotozoom(lava, 0, 2.5)
 lava_rect=lava.get_rect(center=(275, 750))
+suono_lava = pygame.mixer.Sound('Brambilla-Mariani-img/suono-lava.mp3')
 
 player = pygame.sprite.GroupSingle()
 player.add(Player())
@@ -210,7 +212,7 @@ while True:
             
         salta=collisions()
         piattaforme.draw(screen)
-        player.update(salta)
+        player.update(salta, stato)
         salta = False
         player.draw(screen)
 
@@ -230,6 +232,7 @@ while True:
 
         if player.sprite.rect.y>800:
             stato_precedente='classico'
+            urlo_morte.play()
             stato = 'morte'
             inizio=True
 
@@ -246,7 +249,7 @@ while True:
             
         salta=collisions()
         piattaforme.draw(screen)
-        player.update(salta)
+        player.update(salta, stato)
         salta = False
         player.draw(screen)
 
@@ -298,6 +301,7 @@ while True:
         screen.blit(lava, lava_rect)       
 
         if lava_rect.colliderect(player.sprite.rect):
+            suono_lava.play()
             stato_precedente='run mode'
             pygame.time.wait(500)
             stato = 'morte'
